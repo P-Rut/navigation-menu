@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import FormButton from "./FormButton"
 import NavigationForm from "./NavigationForm"
@@ -11,12 +9,24 @@ export default function NavigationItem({ data, addSibling, addChild }) {
   const toggleChildForm = () => setShowChildForm((prev) => !prev)
   const toggleSiblingForm = () => setShowSiblingForm((prev) => !prev)
 
-  const handleAddSibling = (newItem) => {
+  const handleAddSibling = (formData) => {
+    const newItem = {
+      id: crypto.randomUUID(), // Add unique ID
+      label: formData.label,
+      url: formData.url,
+      children: [],
+    }
     addSibling(data.id, newItem)
     setShowSiblingForm(false)
   }
 
-  const handleAddChild = (newItem) => {
+  const handleAddChild = (formData) => {
+    const newItem = {
+      id: crypto.randomUUID(), // Add unique ID
+      label: formData.label,
+      url: formData.url,
+      children: [],
+    }
     addChild(data.id, newItem)
     setShowChildForm(false)
   }
@@ -57,20 +67,19 @@ export default function NavigationItem({ data, addSibling, addChild }) {
       </div>
 
       <div className="ml-6">
-        {data.children &&
-          data.children.map((child) => (
-            <NavigationItem
-              key={child.id}
-              data={child}
-              addSibling={addSibling}
-              addChild={addChild}
-            />
-          ))}
+        {data.children?.map((child) => (
+          <NavigationItem
+            key={child.id}
+            data={child}
+            addSibling={addSibling}
+            addChild={addChild}
+          />
+        ))}
       </div>
 
       <FormButton
         variant="secondary"
-        additionalStyle={"border rounded-md bg-white w-fit mt-2"}
+        additionalStyle="border rounded-md bg-white w-fit mt-2"
         onClick={toggleChildForm}
       >
         Dodaj wewnętrzny element
@@ -79,13 +88,8 @@ export default function NavigationItem({ data, addSibling, addChild }) {
       {showSiblingForm && (
         <div className="mt-4">
           <NavigationForm
-            onSubmit={(formData) =>
-              handleAddSibling({
-                label: formData.label,
-                url: formData.url,
-                children: [],
-              })
-            }
+            onSubmit={handleAddSibling}
+            onCancel={() => setShowSiblingForm(false)}
           />
         </div>
       )}
@@ -93,13 +97,8 @@ export default function NavigationItem({ data, addSibling, addChild }) {
       {showChildForm && (
         <div className="mt-4">
           <NavigationForm
-            onSubmit={(formData) =>
-              handleAddChild({
-                label: formData.label,
-                url: formData.url,
-                children: [],
-              })
-            }
+            onSubmit={handleAddChild}
+            onCancel={() => setShowChildForm(false)}
           />
         </div>
       )}
