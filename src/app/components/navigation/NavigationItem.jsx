@@ -11,7 +11,7 @@ export default function NavigationItem({ data, addSibling, addChild }) {
 
   const handleAddSibling = (formData) => {
     const newItem = {
-      id: crypto.randomUUID(), // Add unique ID
+      id: crypto.randomUUID(),
       label: formData.label,
       url: formData.url,
       children: [],
@@ -22,7 +22,7 @@ export default function NavigationItem({ data, addSibling, addChild }) {
 
   const handleAddChild = (formData) => {
     const newItem = {
-      id: crypto.randomUUID(), // Add unique ID
+      id: crypto.randomUUID(),
       label: formData.label,
       url: formData.url,
       children: [],
