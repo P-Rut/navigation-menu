@@ -2,12 +2,20 @@ import { useState } from "react"
 import FormButton from "./FormButton"
 import NavigationForm from "./NavigationForm"
 
-export default function NavigationItem({ data, addSibling, addChild }) {
+export default function NavigationItem({
+  data,
+  addSibling,
+  addChild,
+  editNode,
+  removeNode,
+}) {
   const [showChildForm, setShowChildForm] = useState(false)
   const [showSiblingForm, setShowSiblingForm] = useState(false)
+  const [showEditForm, setShowEditForm] = useState(false)
 
   const toggleChildForm = () => setShowChildForm((prev) => !prev)
   const toggleSiblingForm = () => setShowSiblingForm((prev) => !prev)
+  const toggleEditForm = () => setShowEditForm((prev) => !prev)
 
   const handleAddSibling = (formData) => {
     const newItem = {
@@ -31,6 +39,15 @@ export default function NavigationItem({ data, addSibling, addChild }) {
     setShowChildForm(false)
   }
 
+  const handleUpdateNode = (formData) => {
+    toggleEditForm()
+    editNode(data.id, formData)
+  }
+
+  const handleRemoveNode = () => {
+    removeNode(data.id)
+  }
+
   return (
     <div className="flex flex-col border rounded-md gap-4 p-4">
       <div className="flex items-center justify-between bg-white rounded-md px-4 py-3 shadow-sm hover:shadow-md transition">
@@ -50,10 +67,18 @@ export default function NavigationItem({ data, addSibling, addChild }) {
         </div>
 
         <div className="flex">
-          <FormButton variant="secondary" additionalStyle="border rounded-l-md">
+          <FormButton
+            onClick={handleRemoveNode}
+            variant="secondary"
+            additionalStyle="border rounded-l-md"
+          >
             Usuń
           </FormButton>
-          <FormButton variant="secondary" additionalStyle="border-y">
+          <FormButton
+            onClick={handleUpdateNode}
+            variant="secondary"
+            additionalStyle="border-y"
+          >
             Edytuj
           </FormButton>
           <FormButton
@@ -73,6 +98,8 @@ export default function NavigationItem({ data, addSibling, addChild }) {
             data={child}
             addSibling={addSibling}
             addChild={addChild}
+            removeNode={removeNode}
+            editNode={editNode}
           />
         ))}
       </div>
@@ -99,6 +126,17 @@ export default function NavigationItem({ data, addSibling, addChild }) {
           <NavigationForm
             onSubmit={handleAddChild}
             onCancel={() => setShowChildForm(false)}
+          />
+        </div>
+      )}
+      {showEditForm && (
+        <div className="mt-4">
+          <NavigationForm
+            onSubmit={(formData) => {
+              editNode(data.id, formData)
+              setShowEditForm(false)
+            }}
+            onCancel={() => setShowEditForm(false)}
           />
         </div>
       )}

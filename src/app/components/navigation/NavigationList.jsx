@@ -6,7 +6,7 @@ import useNavigationOperations from "@/app/customHooks/useNavigationOperations"
 
 export default function NavigationList() {
   const [data, setData] = useState([])
-  const { addSibling, addChild, addFirstItem } =
+  const { addSibling, addChild, addFirstItem, editNode, removeNode } =
     useNavigationOperations(setData)
 
   return (
@@ -20,6 +20,8 @@ export default function NavigationList() {
             data={item}
             addSibling={addSibling}
             addChild={addChild}
+            editNode={editNode}
+            removeNode={removeNode}
           />
         ))
       )}

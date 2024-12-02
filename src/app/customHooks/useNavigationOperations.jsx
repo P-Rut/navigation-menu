@@ -65,5 +65,42 @@ export default function useNavigationOperations(setData) {
       return newState.length ? newState : prev
     })
   }
-  return { addFirstItem, addSibling, addChild }
+  const removeNode = (targetId) => {
+    const removeFromTree = (items) => {
+      return items
+        .filter((item) => item.id !== targetId)
+        .map((item) => ({
+          ...item,
+          children: removeFromTree(item.children || []),
+        }))
+    }
+
+    setData((prevData) => removeFromTree(prevData))
+  }
+
+  const editNode = (targetId, updatedData) => {
+    const updateTree = (items) => {
+      return items.map((item) => {
+        if (item.id === targetId) {
+          return {
+            ...item,
+            ...updatedData,
+          }
+        }
+
+        if (item.children && item.children.length > 0) {
+          return {
+            ...item,
+            children: updateTree(item.children),
+          }
+        }
+
+        return item
+      })
+    }
+
+    setData((prev) => updateTree(prev))
+  }
+
+  return { addFirstItem, addSibling, addChild, editNode, removeNode }
 }
