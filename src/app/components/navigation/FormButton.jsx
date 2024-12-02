@@ -6,7 +6,7 @@ export default function FormButton({
   disabled = false,
   additionalStyle,
 }) {
-  const baseStyles = "text-sm font-medium px-4 py-2 transition "
+  const baseStyles = "text-[14px] font-medium px-4 py-2 transition "
 
   const variants = {
     primary: "text-white bg-purple-600 hover:bg-purple-700 ",

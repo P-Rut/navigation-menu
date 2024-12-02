@@ -20,8 +20,11 @@ export default function NavigationForm({ onSubmit, onCancel }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <div>
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-5 bg-white px-[24px] py-[20px] rounded-md border border-[#D0D5DD]"
+    >
+      <div className=" flex flex-col gap-2">
         <FormInput
           label="Nazwa"
           placeholder="np. Promocje"
@@ -30,10 +33,7 @@ export default function NavigationForm({ onSubmit, onCancel }) {
           name="label"
           value={formData.label}
           onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-md"
         />
-      </div>
-      <div>
         <FormInput
           label={"Link"}
           type="text"
@@ -42,19 +42,22 @@ export default function NavigationForm({ onSubmit, onCancel }) {
           placeholder="Wklej lub wyszukaj"
           value={formData.url}
           onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-md"
         />
       </div>
       <div className="flex gap-2">
         <FormButton
           type="button"
           variant="secondary"
-          additionalStyle="border border-gray-300 rounded-md"
+          additionalStyle="border border-gray-300 rounded-md shadow-sm font-[600]"
           onClick={onCancel}
         >
           Anuluj
         </FormButton>
-        <FormButton type="submit" additionalStyle="rounded-md">
+        <FormButton
+          variant="secondary"
+          type="submit"
+          additionalStyle="rounded-md border border-[#D6BBFB] text-[#6941C6] shadow-sm font-[600]"
+        >
           Dodaj
         </FormButton>
       </div>

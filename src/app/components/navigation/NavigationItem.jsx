@@ -49,7 +49,7 @@ export default function NavigationItem({
   }
 
   return (
-    <div className="flex flex-col border rounded-md gap-4 p-4">
+    <div className="flex flex-col border rounded-md gap-4 ">
       <div className="flex items-center justify-between bg-white rounded-md px-4 py-3 shadow-sm hover:shadow-md transition">
         <div className="flex items-center gap-3">
           <span className="cursor-move text-gray-400">➕</span>
@@ -92,7 +92,7 @@ export default function NavigationItem({
       </div>
 
       <div className="ml-6">
-        {data.children?.map((child) => (
+        {data.children?.map((child, index) => (
           <NavigationItem
             key={child.id}
             data={child}
@@ -106,7 +106,7 @@ export default function NavigationItem({
 
       <FormButton
         variant="secondary"
-        additionalStyle="border rounded-md bg-white w-fit mt-2"
+        additionalStyle="border rounded-md bg-white w-fit mb-[20px] ml-[24px]"
         onClick={toggleChildForm}
       >
         Dodaj wewnętrzny element
