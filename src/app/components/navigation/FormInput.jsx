@@ -1,4 +1,10 @@
-export default function FormInput({ label, placeholder, onChange, name }) {
+export default function FormInput({
+  label,
+  placeholder,
+  onChange,
+  name,
+  value,
+}) {
   return (
     <div className="flex flex-col gap-[6px] ">
       <label
@@ -10,6 +16,7 @@ export default function FormInput({ label, placeholder, onChange, name }) {
       <input
         type="text"
         name={name}
+        value={value}
         placeholder={placeholder}
         onChange={onChange}
         className="w-full py-2 px-3 border border-[#D0D5DD] shadow-sm rounded-md text-[16px] leading-[24px] font-[400] placeholder:text-[#667085] box-border text-[#344054]"
