@@ -10,7 +10,7 @@ export default function FormButton({
 
   const variants = {
     primary: "text-white bg-purple-600 hover:bg-purple-700 ",
-    secondary: "text-gray-600 hover:bg-gray-100 ",
+    secondary: "text-[#344054]",
   }
 
   return (

@@ -8,6 +8,8 @@ export default function NavigationItem({
   addChild,
   editNode,
   removeNode,
+  isLast,
+  isChild = false,
 }) {
   const [showChildForm, setShowChildForm] = useState(false)
   const [showSiblingForm, setShowSiblingForm] = useState(false)
@@ -49,8 +51,12 @@ export default function NavigationItem({
   }
 
   return (
-    <div className="flex flex-col border rounded-md gap-4 ">
-      <div className="flex items-center justify-between bg-white rounded-md px-4 py-3 shadow-sm hover:shadow-md transition">
+    <div className={`flex flex-col`}>
+      <div
+        className={`flex items-center justify-between bg-white px-4 py-3 border-b border-[#EAECF0] ${
+          isChild ? "border-l rounded-bl-md" : ""
+        }`}
+      >
         <div className="flex items-center gap-3">
           <span className="cursor-move text-gray-400">➕</span>
           <div className="flex flex-col">
@@ -81,19 +87,21 @@ export default function NavigationItem({
           >
             Edytuj
           </FormButton>
+
           <FormButton
             variant="secondary"
             additionalStyle="border rounded-r-md"
-            onClick={toggleSiblingForm}
+            onClick={toggleChildForm}
           >
-            Dodaj na tym poziomie
+            Dodaj pozycję menu
           </FormButton>
         </div>
       </div>
 
-      <div className="ml-6">
+      <div className="ml-16">
         {data.children?.map((child, index) => (
           <NavigationItem
+            isChild={true}
             key={child.id}
             data={child}
             addSibling={addSibling}
@@ -103,14 +111,23 @@ export default function NavigationItem({
           />
         ))}
       </div>
-
-      <FormButton
-        variant="secondary"
-        additionalStyle="border rounded-md bg-white w-fit mb-[20px] ml-[24px]"
-        onClick={toggleChildForm}
-      >
-        Dodaj wewnętrzny element
-      </FormButton>
+      {showChildForm && (
+        <div className="p-4 bg-[#F9FAFB]">
+          <NavigationForm
+            onSubmit={handleAddChild}
+            onCancel={() => setShowChildForm(false)}
+          />
+        </div>
+      )}
+      {isLast ? (
+        <FormButton
+          variant="secondary"
+          additionalStyle="border rounded-md bg-white w-fit my-[20px] ml-[24px]"
+          onClick={toggleSiblingForm}
+        >
+          Dodaj pozycje menu
+        </FormButton>
+      ) : null}
 
       {showSiblingForm && (
         <div className="mt-4">
@@ -120,17 +137,8 @@ export default function NavigationItem({
           />
         </div>
       )}
-
-      {showChildForm && (
-        <div className="mt-4">
-          <NavigationForm
-            onSubmit={handleAddChild}
-            onCancel={() => setShowChildForm(false)}
-          />
-        </div>
-      )}
       {showEditForm && (
-        <div className="mt-4">
+        <div className="my-4">
           <NavigationForm
             onSubmit={(formData) => {
               editNode(data.id, formData)
