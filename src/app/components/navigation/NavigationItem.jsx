@@ -24,8 +24,6 @@ export default function NavigationItem({
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    zIndex: isDragging ? 1000 : "auto",
-    opacity: isDragging ? 0.5 : 1,
   }
 
   const [showChildForm, setShowChildForm] = useState(false)
@@ -43,11 +41,6 @@ export default function NavigationItem({
     }
     addChild(data.id, newItem)
     setShowChildForm(false)
-  }
-
-  const handleUpdateNode = (formData) => {
-    toggleEditForm()
-    editNode(data.id, formData)
   }
 
   const handleRemoveNode = () => {
@@ -113,7 +106,7 @@ export default function NavigationItem({
         strategy={verticalListSortingStrategy}
       >
         <div className="ml-16">
-          {data.children?.map((child, index) => (
+          {data.children?.map((child) => (
             <NavigationItem
               isChild={true}
               key={child.id}

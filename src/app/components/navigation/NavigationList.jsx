@@ -1,11 +1,7 @@
 "use client"
 import { useState } from "react"
-import { DndContext, closestCenter, closestCorners } from "@dnd-kit/core"
-import {
-  SortableContext,
-  arrayMove,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable"
+import { DndContext, rectIntersection } from "@dnd-kit/core"
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import NavigationItem from "./NavigationItem"
 import AddItem from "./AddItem"
 import FormButton from "./FormButton"
@@ -79,31 +75,31 @@ export default function NavigationList() {
   const handleDragEnd = (event) => {
     const { active, over } = event
 
-    // Nie wykonujemy akcji, jeśli brak `over` lub przeciągnięcie nie zmienia pozycji
     if (!over || active.id === over.id) return
 
     setData((items) => {
-      const [newItems, activeItem] = removeItemById(items, active.id)
-
-      // Jeśli nie znaleziono elementu, wracamy do poprzedniego stanu
+      const [updatedItems, activeItem] = removeItemById(items, active.id)
       if (!activeItem) return items
 
-      // Znajdź `overItem`, element, na który upuszczono
-      const overItem = findItemById(newItems, over.id)
-
-      if (overItem) {
-        // Sprawdź, czy `over` element ma jakieś dzieci
-        if (overItem.children) {
-          overItem.children.push(activeItem)
-        } else {
-          overItem.children = [activeItem]
+      const insertAtSameLevel = (list, overId, activeItem) => {
+        const index = list.findIndex((item) => item.id === overId)
+        if (index !== -1) {
+          const before = list.slice(0, index)
+          const after = list.slice(index)
+          return [...before, activeItem, ...after]
         }
-      } else {
-        // Element został upuszczony na najwyższy poziom listy
-        newItems.push(activeItem)
+        return list.map((item) => {
+          if (item.children) {
+            return {
+              ...item,
+              children: insertAtSameLevel(item.children, overId, activeItem),
+            }
+          }
+          return item
+        })
       }
 
-      return newItems
+      return insertAtSameLevel(updatedItems, over.id, activeItem)
     })
   }
 
@@ -123,14 +119,14 @@ export default function NavigationList() {
   }
 
   return (
-    <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <DndContext collisionDetection={rectIntersection} onDragEnd={handleDragEnd}>
       <SortableContext items={data} strategy={verticalListSortingStrategy}>
         <div className="bg-gray-100 rounded-md border border-[#D0D5DD] overflow-hidden">
           {data.length === 0 ? (
             <AddItem onAdd={addFirstItem} />
           ) : (
             <>
-              {data.map((item, index) => (
+              {data.map((item) => (
                 <NavigationItem
                   key={item.id}
                   data={item}

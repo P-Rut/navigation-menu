@@ -1,5 +1,3 @@
-import React from "react"
-
 export default function FormInput({ label, placeholder, onChange, name }) {
   return (
     <div className="flex flex-col gap-[6px] ">
