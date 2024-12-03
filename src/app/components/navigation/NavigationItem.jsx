@@ -1,34 +1,38 @@
 import { useState } from "react"
 import FormButton from "./FormButton"
 import NavigationForm from "./NavigationForm"
+import { useSortable } from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 
 export default function NavigationItem({
   data,
-  addSibling,
   addChild,
   editNode,
   removeNode,
-  isLast,
   isChild = false,
 }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: data.id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 1000 : "auto",
+    opacity: isDragging ? 0.5 : 1,
+  }
+
   const [showChildForm, setShowChildForm] = useState(false)
-  const [showSiblingForm, setShowSiblingForm] = useState(false)
   const [showEditForm, setShowEditForm] = useState(false)
 
   const toggleChildForm = () => setShowChildForm((prev) => !prev)
-  const toggleSiblingForm = () => setShowSiblingForm((prev) => !prev)
   const toggleEditForm = () => setShowEditForm((prev) => !prev)
-
-  const handleAddSibling = (formData) => {
-    const newItem = {
-      id: crypto.randomUUID(),
-      label: formData.label,
-      url: formData.url,
-      children: [],
-    }
-    addSibling(data.id, newItem)
-    setShowSiblingForm(false)
-  }
 
   const handleAddChild = (formData) => {
     const newItem = {
@@ -51,14 +55,20 @@ export default function NavigationItem({
   }
 
   return (
-    <div className={`flex flex-col`}>
+    <div ref={setNodeRef} style={style} className={`flex flex-col`}>
       <div
         className={`flex items-center justify-between bg-white px-4 py-3 border-b border-[#EAECF0] ${
           isChild ? "border-l rounded-bl-md" : ""
         }`}
       >
         <div className="flex items-center gap-3">
-          <span className="cursor-move text-gray-400">➕</span>
+          <span
+            className="cursor-move text-gray-400"
+            {...attributes}
+            {...listeners}
+          >
+            ➕
+          </span>
           <div className="flex flex-col">
             <span className="font-medium text-gray-800">{data.label}</span>
             <a
@@ -81,7 +91,7 @@ export default function NavigationItem({
             Usuń
           </FormButton>
           <FormButton
-            onClick={handleUpdateNode}
+            onClick={toggleEditForm}
             variant="secondary"
             additionalStyle="border-y"
           >
@@ -98,19 +108,24 @@ export default function NavigationItem({
         </div>
       </div>
 
-      <div className="ml-16">
-        {data.children?.map((child, index) => (
-          <NavigationItem
-            isChild={true}
-            key={child.id}
-            data={child}
-            addSibling={addSibling}
-            addChild={addChild}
-            removeNode={removeNode}
-            editNode={editNode}
-          />
-        ))}
-      </div>
+      <SortableContext
+        items={data.children || []}
+        strategy={verticalListSortingStrategy}
+      >
+        <div className="ml-16">
+          {data.children?.map((child, index) => (
+            <NavigationItem
+              isChild={true}
+              key={child.id}
+              data={child}
+              addChild={addChild}
+              removeNode={removeNode}
+              editNode={editNode}
+            />
+          ))}
+        </div>
+      </SortableContext>
+
       {showChildForm && (
         <div className="p-4 bg-[#F9FAFB]">
           <NavigationForm
@@ -119,24 +134,7 @@ export default function NavigationItem({
           />
         </div>
       )}
-      {isLast ? (
-        <FormButton
-          variant="secondary"
-          additionalStyle="border rounded-md bg-white w-fit my-[20px] ml-[24px]"
-          onClick={toggleSiblingForm}
-        >
-          Dodaj pozycje menu
-        </FormButton>
-      ) : null}
 
-      {showSiblingForm && (
-        <div className="mt-4">
-          <NavigationForm
-            onSubmit={handleAddSibling}
-            onCancel={() => setShowSiblingForm(false)}
-          />
-        </div>
-      )}
       {showEditForm && (
         <div className="my-4">
           <NavigationForm
