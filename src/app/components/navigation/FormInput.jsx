@@ -12,7 +12,7 @@ export default function FormInput({ label, placeholder, onChange, name }) {
         name={name}
         placeholder={placeholder}
         onChange={onChange}
-        className="w-full py-2 px-3 border border-[#D0D5DD] shadow-sm rounded-md text-[16px] leading-[24px] font-[400] placeholder:text-[#667085] box-border"
+        className="w-full py-2 px-3 border border-[#D0D5DD] shadow-sm rounded-md text-[16px] leading-[24px] font-[400] placeholder:text-[#667085] box-border text-[#344054]"
       />
     </div>
   )

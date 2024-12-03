@@ -21,7 +21,7 @@ export default function AddItem({ onAdd }) {
 
   if (showForm) {
     return (
-      <div className="mt-4 w-full">
+      <div className="w-full">
         <NavigationForm onSubmit={handleAdd} onCancel={onCancel} />
       </div>
     )

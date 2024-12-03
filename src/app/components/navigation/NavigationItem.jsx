@@ -4,6 +4,8 @@ import NavigationForm from "./NavigationForm"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
+import moveIcon from "../../../../public/move.svg"
+import Image from "next/image"
 
 export default function NavigationItem({
   data,
@@ -60,7 +62,7 @@ export default function NavigationItem({
             {...attributes}
             {...listeners}
           >
-            ➕
+            <Image src={moveIcon} alt="icon" />
           </span>
           <div className="flex flex-col">
             <span className="font-medium text-gray-800">{data.label}</span>

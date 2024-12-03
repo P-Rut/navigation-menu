@@ -121,7 +121,7 @@ export default function NavigationList() {
   return (
     <DndContext collisionDetection={rectIntersection} onDragEnd={handleDragEnd}>
       <SortableContext items={data} strategy={verticalListSortingStrategy}>
-        <div className="bg-gray-100 rounded-md border border-[#D0D5DD] overflow-hidden">
+        <div className="bg-[#F9FAFB] rounded-md border border-[##EAECF0] overflow-hidden">
           {data.length === 0 ? (
             <AddItem onAdd={addFirstItem} />
           ) : (
@@ -137,13 +137,16 @@ export default function NavigationList() {
               ))}
             </>
           )}
-          <FormButton
-            variant="secondary"
-            additionalStyle="border rounded-md bg-white w-fit my-[20px] ml-[24px]"
-            onClick={() => toggleSiblingForm(null)}
-          >
-            Dodaj na tym poziomie
-          </FormButton>
+
+          {data.length > 0 && (
+            <FormButton
+              variant="secondary"
+              additionalStyle="border rounded-md bg-white w-fit my-[20px] ml-[24px] font-[600]"
+              onClick={() => toggleSiblingForm(null)}
+            >
+              Dodaj pozycję menu
+            </FormButton>
+          )}
         </div>
       </SortableContext>
 
