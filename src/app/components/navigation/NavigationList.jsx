@@ -141,16 +141,15 @@ export default function NavigationList() {
               ))}
             </>
           )}
+          <FormButton
+            variant="secondary"
+            additionalStyle="border rounded-md bg-white w-fit my-[20px] ml-[24px]"
+            onClick={() => toggleSiblingForm(null)}
+          >
+            Dodaj na tym poziomie
+          </FormButton>
         </div>
       </SortableContext>
-
-      <FormButton
-        variant="secondary"
-        additionalStyle="border rounded-md bg-white w-fit my-[20px] ml-[24px]"
-        onClick={() => toggleSiblingForm(null)}
-      >
-        Dodaj na tym poziomie
-      </FormButton>
 
       {showSiblingForm && (
         <div className="mt-4">
